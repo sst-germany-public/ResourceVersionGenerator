@@ -26,12 +26,12 @@ jobs:
 
       - name: Projekt mit MSBuild kompilieren.
         shell: pwsh
-        run: msbuild.exe /t:Restore,Build /p:Configuration=Release /p:Platform=x64
+        run: msbuild.exe /t:Restore,Build /p:Configuration=Release
 
       #- name: Test C# XUnit Projects
       #  shell: pwsh
       #  run: |
       #    Get-ChildItem -Path .\_Test -Recurse -Filter *.csproj | ForEach-Object {
       #      Write-Host "Testing project: $($_.FullName)"
-      #      dotnet test $_.FullName /p:Configuration=Release /p:Platform=x64
+      #      dotnet test $_.FullName /p:Configuration=Release
       #    }
