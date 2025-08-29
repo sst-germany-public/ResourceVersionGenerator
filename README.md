@@ -16,7 +16,7 @@ Das Tool wird als .NET-Tool über NuGet bereitgestellt. Sie können es global od
 **Globale Installation:**
 
 ```bash
-dotnet tool install --global sst-resource-version-generator
+dotnet tool install --global ResourceVersionGenerator
 ```
 
 **Lokale Installation:**
@@ -24,10 +24,10 @@ dotnet tool install --global sst-resource-version-generator
 ```bash
 # In Ihrem Projektverzeichnis
 dotnet new tool-manifest
-dotnet tool install sst-resource-version-generator
+dotnet tool install ResourceVersionGenerator
 ```
 
-Nach der Installation können Sie das Tool über den Befehl **`sst-resource-version-generator`** aufrufen.
+Nach der Installation können Sie das Tool über den Befehl **`ResourceVersionGenerator`** aufrufen.
 
 -----
 
@@ -38,7 +38,7 @@ Führen Sie den Befehl einfach im Stammverzeichnis Ihres C++-Projekts aus.
 **Beispiel:**
 
 ```bash
-sst-resource-version-generator --company "My Awesome Company" --product "My Product Name" --output "./resourceVersion.h"
+ResourceVersionGenerator --company "My Awesome Company" --product "My Product Name" --output "./resourceVersion.h"
 ```
 
 Dies generiert eine Datei namens `resourceVersion.h` im aktuellen Verzeichnis mit den Versionsinformationen aus Ihren Umgebungsvariablen.
@@ -70,7 +70,7 @@ Um dieses Tool in Ihren C++-Build-Prozess (z.B. in eine `.vcxproj` oder ein CMak
 ```cmake
 # Führen Sie das Tool vor dem eigentlichen Build aus
 execute_process(
-    COMMAND sst-resource-version-generator --company "SST Germany" --product "MyCoolApp"
+    COMMAND ResourceVersionGenerator --company "My Awesome Company" --product "MyCoolApp"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
