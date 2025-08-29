@@ -43,21 +43,30 @@ ResourceVersionGenerator --company "My Awesome Company" --product "My Product Na
 
 Dies generiert eine Datei namens `resourceVersion.h` im aktuellen Verzeichnis mit den Versionsinformationen aus Ihren Umgebungsvariablen.
 
+
+**Beispiel:**
+
+```bash
+ResourceVersionGenerator --company "My Awesome Company" --product "My.dll" --originalFilename "My.dll" --description "Do good stuff" --nbgv
+```
+
+
+
 -----
 
 ### Kommandozeilenoptionen
 
 | Kurze Option | Lange Option | Beschreibung |
 | :--- | :--- | :--- |
-| | `--company` | **Firmenname**. Wird für den Copyright-Text verwendet. Wird zwingend benötigt.|
+| `-c`| `--company` | **Firmenname**. Wird für den Copyright-Text verwendet. Wird zwingend benötigt.|
 | `-o` | `--output` | **Ausgabedatei**. Standard: `./resourceVersion.h` |
 | `-p` | `--product` | **Produktname**. |
 | `-d` | `--description` | **Produktbeschreibung**. |
-| `-f` | `--originalFilename` | **Original-Dateiname** der Binärdatei. |
+| | `--originalFilename` | **Original-Dateiname** der Binärdatei. |
 | `-n` | `--nbgv` | Verwendet `nbgv` direkt, um die Versionsinformationen zu ermitteln. |
-| | `--forceGet` | Erzwingt die Ausführung von `nbgv`, auch wenn gültige Umgebungsvariablen verfügbar sind. Ist nur aktiv, wenn `nbgv` verwendet wird.|
-| | `--version` | Manuelle **Versionsnummer** (`Major.Minor.Patch.Build`). Überschreibt automatische Versionen. |
-| `-v` | `--verbose` | Gibt **ausführliche Konsolenmeldungen** aus, um den Prozess zu verfolgen. |
+| | `--forceVersionUpdate` | Erzwingt die Ausführung von `nbgv`, auch wenn gültige Umgebungsvariablen verfügbar sind. Ist nur aktiv, wenn `nbgv` verwendet wird.|
+| | `--forceVersion` | Manuelle **Versionsnummer** (`Major.Minor.Patch.Build`). Überschreibt automatische Versionen. |
+| | `--verbose` | Gibt **ausführliche Konsolenmeldungen** aus, um den Prozess zu verfolgen. |
 
 -----
 
