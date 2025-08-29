@@ -5,6 +5,11 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<Title>Resource Version Generator</Title>
+		<Company>SST Scheubeck GmbH</Company>
+		<Authors>SST Scheubeck GmbH</Authors>
+		<Description>A CI tool to update resourceVersion.h files.</Description>
+		<Copyright>Copyright © SST Scheubeck GmbH $([System.DateTime]::Now.ToString("yyyy"))</Copyright>
 	</PropertyGroup>
 
 	<!-- Package Definitionen -->
@@ -17,16 +22,16 @@
 		<SelfContained>false</SelfContained>
 		<PublishSingleFile>false</PublishSingleFile>
 		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/sst-germany/public_sst-ResourceVersionGenerator</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/sst-germany/public_sst-ResourceVersionGenerator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/sst-germany/public_ResourceVersionGenerator</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/sst-germany/public_ResourceVersionGenerator</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\README.md" Pack="True" PackagePath="\"/>
-		<None Include="..\LICENSE.md" Pack="True" PackagePath="\"/>
+		<None Include="..\README.md" Pack="True" PackagePath="\" />
+		<None Include="..\LICENSE.md" Pack="True" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
