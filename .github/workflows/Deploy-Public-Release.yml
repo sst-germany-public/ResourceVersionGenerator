@@ -1,0 +1,59 @@
+name: Deploy-Public-Release
+
+on:
+  workflow_dispatch: # manuell starten
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Repository auschecken.
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0
+
+      - name: Versionsprüfungen
+        uses: sst-germany/actions_nbgvValidate@main
+        with:
+          requiresPublicRelease: "yes"         # "yes" | "no" | "" (leer = keine Validierung)
+          requiresPrereleaseVersion: "no"      # "yes" | "no" | "" (leer = keine Validierung)
+
+      - name: MSBuild (setup path).
+        uses: microsoft/setup-msbuild@v2
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Projekt mit MSBuild kompilieren.
+        shell: pwsh
+        run: msbuild.exe /t:Restore,Build /p:Configuration=Release /p:Platform=x64
+
+      #- name: Test C# XUnit Projects
+      #  shell: pwsh
+      #  run: |
+      #    Get-ChildItem -Path .\_Test -Recurse -Filter *.csproj | ForEach-Object {
+      #      Write-Host "Testing project: $($_.FullName)"
+      #      dotnet test $_.FullName /p:Configuration=Release /p:Platform=x64
+      #    }
+
+      # NuGet
+      - name: Alle NuGet-Pakete auflisten.
+        run: Get-ChildItem ".\.nuget"
+
+      # Paket auf nuget.org veröffentlichen
+      - name: Publish
+        run: |
+          dotnet nuget push .\.nuget\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+      - name: Create tag
+        shell: pwsh
+        run: |
+          git tag "releases/v$env:NBGV_Version"
+          git push origin "releases/v$env:NBGV_Version"

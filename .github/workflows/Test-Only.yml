@@ -1,0 +1,37 @@
+name: Test-Only
+
+on:
+  workflow_dispatch: # manuell starten
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Repository auschecken.
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: MSBuild (setup path).
+        uses: microsoft/setup-msbuild@v2
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Projekt mit MSBuild kompilieren.
+        shell: pwsh
+        run: msbuild.exe /t:Restore,Build /p:Configuration=Release /p:Platform=x64
+
+      #- name: Test C# XUnit Projects
+      #  shell: pwsh
+      #  run: |
+      #    Get-ChildItem -Path .\_Test -Recurse -Filter *.csproj | ForEach-Object {
+      #      Write-Host "Testing project: $($_.FullName)"
+      #      dotnet test $_.FullName /p:Configuration=Release /p:Platform=x64
+      #    }
