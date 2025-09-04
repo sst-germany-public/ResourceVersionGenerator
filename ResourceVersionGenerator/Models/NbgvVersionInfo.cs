@@ -99,14 +99,14 @@ namespace ResourceVersionGenerator.Models
                 var instance = new NbgvVersionInfo();
                 instance.VersionFileFound = tryGetBoolean(nameof(NbgvVersionInfo.VersionFileFound));
                 instance.PublicRelease = tryGetBoolean(nameof(NbgvVersionInfo.PublicRelease));
-                instance.PrereleaseVersion = tryGetString(nameof(NbgvVersionInfo.PrereleaseVersion));
+                instance.PrereleaseVersion = tryGetString(nameof(NbgvVersionInfo.PrereleaseVersion), throwIfNullOrWhiteSpace: false /* kann tatsächlich leer sein, dann ist es keine pre-release */);
                 instance.Version = tryGetVersion(nameof(NbgvVersionInfo.Version));
                 instance.AssemblyVersion = tryGetVersion(nameof(NbgvVersionInfo.AssemblyVersion));
                 instance.AssemblyFileVersion = tryGetVersion(nameof(NbgvVersionInfo.VersionFileFound));
-                instance.AssemblyInformationalVersion = tryGetString(nameof(NbgvVersionInfo.AssemblyInformationalVersion));
-                instance.NuGetPackageVersion = tryGetString(nameof(NbgvVersionInfo.NuGetPackageVersion));
-                instance.GitCommitId = tryGetString(nameof(NbgvVersionInfo.GitCommitId));
-                instance.GitCommitIdShort = tryGetString(nameof(NbgvVersionInfo.GitCommitIdShort));
+                instance.AssemblyInformationalVersion = tryGetString(nameof(NbgvVersionInfo.AssemblyInformationalVersion), throwIfNullOrWhiteSpace: true);
+                instance.NuGetPackageVersion = tryGetString(nameof(NbgvVersionInfo.NuGetPackageVersion), throwIfNullOrWhiteSpace: true);
+                instance.GitCommitId = tryGetString(nameof(NbgvVersionInfo.GitCommitId), throwIfNullOrWhiteSpace: true);
+                instance.GitCommitIdShort = tryGetString(nameof(NbgvVersionInfo.GitCommitIdShort), throwIfNullOrWhiteSpace: true);
                 return Task.FromResult<NbgvVersionInfo?>(instance);
 
                 bool doExists(string name)
@@ -129,13 +129,20 @@ namespace ResourceVersionGenerator.Models
                     }
                     return version;
                 }
-                string tryGetString(string name)
+                string tryGetString(string name, bool throwIfNullOrWhiteSpace)
                 {
                     log.Verbose($"Checking environment variable 'NBGV_{name}'... (as string)");
                     var value = Environment.GetEnvironmentVariable($"NBGV_{name}");
                     if (string.IsNullOrWhiteSpace(value))
                     {
-                        throw new InvalidOperationException($"Die Umgebungsvariable 'NBGV_{name}' ist nicht gesetzt oder leer.");
+                        if (throwIfNullOrWhiteSpace)
+                        {
+                            throw new InvalidOperationException($"Die Umgebungsvariable 'NBGV_{name}' ist nicht gesetzt oder leer.");
+                        }
+                        else
+                        {
+                            return string.Empty;
+                        }
                     }
                     return value;
                 }
