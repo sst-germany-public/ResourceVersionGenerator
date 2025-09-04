@@ -102,7 +102,7 @@ namespace ResourceVersionGenerator.Models
                 instance.PrereleaseVersion = tryGetString(nameof(NbgvVersionInfo.PrereleaseVersion), throwIfNullOrWhiteSpace: false /* kann tatsächlich leer sein, dann ist es keine pre-release */);
                 instance.Version = tryGetVersion(nameof(NbgvVersionInfo.Version));
                 instance.AssemblyVersion = tryGetVersion(nameof(NbgvVersionInfo.AssemblyVersion));
-                instance.AssemblyFileVersion = tryGetVersion(nameof(NbgvVersionInfo.VersionFileFound));
+                instance.AssemblyFileVersion = tryGetVersion(nameof(NbgvVersionInfo.AssemblyFileVersion));
                 instance.AssemblyInformationalVersion = tryGetString(nameof(NbgvVersionInfo.AssemblyInformationalVersion), throwIfNullOrWhiteSpace: true);
                 instance.NuGetPackageVersion = tryGetString(nameof(NbgvVersionInfo.NuGetPackageVersion), throwIfNullOrWhiteSpace: true);
                 instance.GitCommitId = tryGetString(nameof(NbgvVersionInfo.GitCommitId), throwIfNullOrWhiteSpace: true);
