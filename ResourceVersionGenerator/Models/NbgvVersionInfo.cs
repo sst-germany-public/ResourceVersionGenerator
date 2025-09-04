@@ -82,7 +82,7 @@ namespace ResourceVersionGenerator.Models
             }
             catch (Exception ex)
             {
-                log.Error($"Ein unerwarteter Fehler ist aufgetreten: {ex.Message}");
+                log.Error($"Ein unerwarteter Fehler ist aufgetreten (CreateFromNBGVAsync): {ex.Message}");
                 return null;
             }
         }
@@ -109,22 +109,29 @@ namespace ResourceVersionGenerator.Models
                 instance.GitCommitIdShort = tryGetString(nameof(NbgvVersionInfo.GitCommitIdShort));
                 return Task.FromResult<NbgvVersionInfo?>(instance);
 
-                static bool doExists(string name)
+                bool doExists(string name)
                 {
+                    log.Verbose($"Checking environment variable 'NBGV_{name}'... (exists?)");
                     var value = Environment.GetEnvironmentVariable($"NBGV_{name}");
-                    return !string.IsNullOrWhiteSpace(value);
+                    return string.IsNullOrWhiteSpace(value) == false;
                 }
-                static Version tryGetVersion(string name)
+                Version tryGetVersion(string name)
                 {
+                    log.Verbose($"Checking environment variable 'NBGV_{name}'... (version)");
                     var value = Environment.GetEnvironmentVariable($"NBGV_{name}");
                     if (string.IsNullOrWhiteSpace(value))
                     {
                         throw new InvalidOperationException($"Die Umgebungsvariable 'NBGV_{name}' ist nicht gesetzt oder leer.");
                     }
-                    return new Version(value);
+                    if (!Version.TryParse(value, out var version))
+                    {
+                        throw new InvalidOperationException($"Die Umgebungsvariable 'NBGV_{name}' enthält keinen gültigen Versionswert: '{value}'.");
+                    }
+                    return version;
                 }
-                static string tryGetString(string name)
+                string tryGetString(string name)
                 {
+                    log.Verbose($"Checking environment variable 'NBGV_{name}'... (as string)");
                     var value = Environment.GetEnvironmentVariable($"NBGV_{name}");
                     if (string.IsNullOrWhiteSpace(value))
                     {
@@ -132,8 +139,9 @@ namespace ResourceVersionGenerator.Models
                     }
                     return value;
                 }
-                static bool tryGetBoolean(string name)
+                bool tryGetBoolean(string name)
                 {
+                    log.Verbose($"Checking environment variable 'NBGV_{name}'... (as bool)");
                     var value = Environment.GetEnvironmentVariable($"NBGV_{name}");
                     if (string.IsNullOrWhiteSpace(value))
                     {
@@ -155,7 +163,7 @@ namespace ResourceVersionGenerator.Models
             }
             catch (Exception ex)
             {
-                log.Error($"Ein unerwarteter Fehler ist aufgetreten: {ex.Message}");
+                log.Error($"Ein unerwarteter Fehler ist aufgetreten (CreateFromEnvironmentAsync): {ex.Message}");
                 return Task.FromResult<NbgvVersionInfo?>(null);
             }
         }
