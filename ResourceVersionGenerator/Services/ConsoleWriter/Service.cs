@@ -27,6 +27,11 @@
         }
         public void Verbose(string message)
         {
+            if (!_isVerbose)
+            {
+                return;
+            }
+
             Console.WriteLine(message);
         }
     }
