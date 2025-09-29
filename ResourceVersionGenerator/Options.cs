@@ -28,5 +28,8 @@
         [CommandLine.Option("verbose", Required = false, HelpText = "Verbose console messages.")]
         public bool Verbose { get; set; } = false;
 
+        [CommandLine.Option('e', "encoding", Required = false, HelpText = "Encoding codepage. Default 65001/UTF8.")]
+        public int Encoding { get; set; } = 65001;
+
     }
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ResourceVersionGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-o resourceVersion.h -p \"TestProduct\" -c \"TestCompany\" -d \"TestDescription\" -n"
+    }
+  }
+}
