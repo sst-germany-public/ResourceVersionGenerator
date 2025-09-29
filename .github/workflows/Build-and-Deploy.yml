@@ -1,0 +1,102 @@
+name: Build-and-Deploy        
+
+on:
+  workflow_dispatch: # manuell starten   
+    inputs:
+      modeChoice:
+        description: "Deploy type:"
+        required: true
+        default: "Release"
+        type: choice
+        options:
+          - Release
+          - Pre-Release
+          - Test-Only
+      buildRelease:
+        description: "msbuild (release)"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      buildDebug:
+        description: "msbuild (debug)"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Repository auschecken.
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0
+          lfs: true
+
+
+      - name: NBGV (Validation, Release)
+        if: ${{ github.event.inputs.modeChoice == 'Release' }}
+        uses: sst-germany/actions_nbgvValidate@main
+        with:
+          path: "./${{ env.Cfg_PortName }}"
+          requiresPublicRelease: "yes"         # "yes" | "no" | "" (leer = keine Validierung)
+          requiresPrereleaseVersion: "no"      # "yes" | "no" | "" (leer = keine Validierung)
+         
+      - name: NBGV (Validation, Pre-Release)
+        if: ${{ github.event.inputs.modeChoice == 'Pre-Release' }}
+        uses: sst-germany/actions_nbgvValidate@main
+        with:
+          path: "./${{ env.Cfg_PortName }}"
+          requiresPublicRelease: "no"          # "yes" | "no" | "" (leer = keine Validierung)
+          requiresPrereleaseVersion: "yes"     # "yes" | "no" | "" (leer = keine Validierung)
+
+      - name: NBGV (Validation, Test-Only)
+        if: ${{ github.event.inputs.modeChoice == 'Test-Only' }}
+        uses: sst-germany/actions_nbgvValidate@main
+        with:
+          path: "./${{ env.Cfg_PortName }}"
+          requiresPublicRelease: ""            # "yes" | "no" | "" (leer = keine Validierung)
+          requiresPrereleaseVersion: ""        # "yes" | "no" | "" (leer = keine Validierung)
+
+
+      - name: MSBuild (setup path).
+        uses: microsoft/setup-msbuild@v2
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Projekt mit MSBuild kompilieren.
+        shell: pwsh
+        run: msbuild.exe /t:Restore,Build /p:Configuration=Release
+
+      #- name: Test C# XUnit Projects
+      #  shell: pwsh
+      #  run: |
+      #    Get-ChildItem -Path .\_Test -Recurse -Filter *.csproj | ForEach-Object {
+      #      Write-Host "Testing project: $($_.FullName)"
+      #      dotnet test $_.FullName /p:Configuration=Release
+      #    }
+
+      # NuGet
+      - name: Alle NuGet-Pakete auflisten.
+        run: Get-ChildItem ".\.nuget"
+
+      # Paket auf nuget.org veröffentlichen
+      - name: Publish
+        if: ${{ github.event.inputs.modeChoice == 'Release' || github.event.inputs.modeChoice == 'Pre-Release' }}
+        run: |
+          dotnet nuget push .\.nuget\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      

@@ -15,9 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\Deploy-Pre-Release.yml = .github\workflows\Deploy-Pre-Release.yml
-		.github\workflows\Deploy-Public-Release.yml = .github\workflows\Deploy-Public-Release.yml
-		.github\workflows\Test-Only.yml = .github\workflows\Test-Only.yml
+		.github\workflows\Build-and-Deploy.yml = .github\workflows\Build-and-Deploy.yml
 	EndProjectSection
 EndProject
 Global
