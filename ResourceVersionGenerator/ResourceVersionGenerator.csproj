@@ -22,8 +22,8 @@
 		<SelfContained>false</SelfContained>
 		<PublishSingleFile>false</PublishSingleFile>
 		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/sst-germany/public_ResourceVersionGenerator</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/sst-germany/public_ResourceVersionGenerator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/sst-germany-public/ResourceVersionGenerator</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/sst-germany-public/ResourceVersionGenerator</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
