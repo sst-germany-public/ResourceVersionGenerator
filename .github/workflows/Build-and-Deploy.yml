@@ -12,26 +12,9 @@ on:
           - Release
           - Pre-Release
           - Test-Only
-      buildRelease:
-        description: "msbuild (release)"
-        required: true
-        default: "true"
-        type: choice
-        options:
-          - "true"
-          - "false"
-      buildDebug:
-        description: "msbuild (debug)"
-        required: true
-        default: "true"
-        type: choice
-        options:
-          - "true"
-          - "false"
 
 permissions:
   contents: write
-  packages: write
 
 jobs:
   build:
