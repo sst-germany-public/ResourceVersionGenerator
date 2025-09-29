@@ -86,4 +86,10 @@ jobs:
         if: ${{ github.event.inputs.modeChoice == 'Release' || github.event.inputs.modeChoice == 'Pre-Release' }}
         run: |
           dotnet nuget push .\.nuget\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
-      
+
+      - name: Create tag
+        if: ${{ github.event.inputs.modeChoice == 'Release' || github.event.inputs.modeChoice == 'Pre-Release' }}
+        shell: pwsh
+        run: |
+          git tag "releases/v$env:NBGV_Version"
+          git push origin "releases/v$env:NBGV_Version"
