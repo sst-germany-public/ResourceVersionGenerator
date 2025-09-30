@@ -1,89 +1,83 @@
 ﻿# Resource Version Generator
 
-Ein kleines .NET-Tool, das eine `resourceVersion.h`-Headerdatei für Ihre C++-Projekte generiert. Es ist ideal, um Versionsinformationen automatisch in Ihre Binärdateien zu integrieren.
+A small .NET tool that generates a `resourceVersion.h` header file for your C++ projects. It is ideal for automatically integrating version information into your binaries.
 
-Das Tool kann Versionsinformationen aus zwei Hauptquellen beziehen:
+The tool can obtain version information from two main sources:
 
-1.  **Automatisch:** Bei Projekten welche mit [Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning) verwaltet werden.
-2.  **Manuell:** Durch direkte Angabe einer Versionsnummer über die Kommandozeile.
+1.  **Automatic:** For projects managed with [Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning).
+2.  **Manual:** By directly specifying a version number via the command line.
 
 -----
 
 ### Installation
 
-Das Tool wird als .NET-Tool über NuGet bereitgestellt. Sie können es global oder lokal in Ihrem Projekt installieren.
+The tool is provided as a .NET tool via NuGet. You can install it globally or locally in your project.
 
-**Globale Installation:**
-
+**Global Installation:**
 ```bash
 dotnet tool install --global ResourceVersionGenerator
 ```
 
-**Lokale Installation:**
-
+**Local Installation:**
 ```bash
 # In Ihrem Projektverzeichnis
+
 dotnet new tool-manifest
+
 dotnet tool install ResourceVersionGenerator
 ```
-
-Nach der Installation können Sie das Tool über den Befehl **`ResourceVersionGenerator`** aufrufen.
+After installation, you can run the tool using the **`ResourceVersionGenerator`** command.
 
 -----
 
-### Verwendung
+### Usage
 
-Führen Sie den Befehl einfach im Stammverzeichnis Ihres C++-Projekts aus. 
+Simply run the command in the root directory of your C++ project.
 
-**Beispiel:**
-
+**Example:**
 ```bash
 ResourceVersionGenerator --company "My Awesome Company" --product "My Product Name" --output "./resourceVersion.h"
 ```
+This generates a file named `resourceVersion.h` in the current directory with the version information from your environment variables.
 
-Dies generiert eine Datei namens `resourceVersion.h` im aktuellen Verzeichnis mit den Versionsinformationen aus Ihren Umgebungsvariablen.
 
-
-**Beispiel:**
-
+**Example:**
 ```bash
 ResourceVersionGenerator --company "My Awesome Company" --product "My.dll" --originalFilename "My.dll" --description "Do good stuff" --nbgv
 ```
-
-
-
 -----
 
-### Kommandozeilenoptionen
+### Command Line Options
 
-| Kurze Option | Lange Option | Beschreibung |
+| Short Option | Long Option | Description |
 | :--- | :--- | :--- |
-| `-c`| `--company` | **Firmenname**. Wird für den Copyright-Text verwendet. Wird zwingend benötigt.|
-| `-o` | `--output` | **Ausgabedatei**. Standard: `./resourceVersion.h` |
-| `-p` | `--product` | **Produktname**. |
-| `-d` | `--description` | **Produktbeschreibung**. |
-| | `--originalFilename` | **Original-Dateiname** der Binärdatei. |
-| `-n` | `--nbgv` | Verwendet `nbgv` direkt, um die Versionsinformationen zu ermitteln. |
-| | `--forceVersionUpdate` | Erzwingt die Ausführung von `nbgv`, auch wenn gültige Umgebungsvariablen verfügbar sind. Ist nur aktiv, wenn `nbgv` verwendet wird.|
-| | `--forceVersion` | Manuelle **Versionsnummer** (`Major.Minor.Patch.Build`). Überschreibt automatische Versionen. |
-| | `--verbose` | Gibt **ausführliche Konsolenmeldungen** aus, um den Prozess zu verfolgen. |
-| | `--emergencyVersion` | Erzwingt die Version `1.0.0.0-emergency`, unabhängig von anderen Einstellungen. Der Standard ist `false`.|
-| `-e` | `--encoding` | Definiert das Enconding für die erzeugte Datei. Der Wert ist eine Zahl, welche der Encoder `CodePage` entspricht. Der Standard ist hier 65001 (UTF8).|
-| `-s` | `--silent` | Unterdrückt alle Ausgaben, außer im Falle eines Fehlers. |
+| `-c`| `--company` | **Company name**. Used for the copyright text. Required.|
+| `-o` | `--output` | **Output file**. Default: `./resourceVersion.h` |
+| `-p` | `--product` | **Product name**. |
+| `-d` | `--description` | **Product description**. |
+| | `--originalFilename` | **Original file name** of the binary. |
+| `-n` | `--nbgv` | Uses `nbgv` directly to determine the version information. |
+| | `--forceVersionUpdate` | Forces execution of `nbgv` even if valid environment variables are available. Only active when using `nbgv`.|
+| | `--forceVersion` | Manual **version number** (`Major.Minor.Patch.Build`). Overrides automatic versions. |
+| | `--verbose` | Outputs **detailed console messages** to track the process. |
+| | `--emergencyVersion` | Forces the version `1.0.0.0-emergency`, regardless of other settings. Default is `false`.|
+| `-e` | `--encoding` | Defines the encoding for the generated file. The value is a number corresponding to the encoder `CodePage`. Default is 65001 (UTF8).|
+| `-s` | `--silent` | Suppresses all output except in case of an error. |
 
 -----
 
-### Integration in Ihren Build-Prozess
+### Integration into Your Build Process
 
-Um dieses Tool in Ihren C++-Build-Prozess (z.B. in eine `.vcxproj` oder ein CMake-Skript) zu integrieren, führen Sie einfach den Befehl vor dem Kompilierungsschritt aus. Das stellt sicher, dass die `resourceVersion.h`-Datei immer auf dem neuesten Stand ist.
+To integrate this tool into your C++ build process (e.g., in a `.vcxproj` or a CMake script), simply run the command before the compilation step. This ensures that the `resourceVersion.h` file is always up to date.
 
-**Beispiel für eine CMake-Integration:**
-
+**Example for CMake integration:**
 ```cmake
 # Führen Sie das Tool vor dem eigentlichen Build aus
 execute_process(
-    COMMAND ResourceVersionGenerator --company "My Awesome Company" --product "MyCoolApp"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+
+    COMMAND ResourceVersionGenerator --company "My Awesome Company" --product "MyCoolApp"
+
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
 # Fügen Sie dann die generierte Datei Ihrem Projekt hinzu
@@ -92,6 +86,6 @@ add_executable(MyCoolApp main.cpp resourceVersion.h)
 
 -----
 
-### Lizenz
+### License
 
-Dieses Projekt ist unter der **MIT-Lizenz** lizenziert. Weitere Details finden Sie in der `LICENSE.md`-Datei.
+This project is licensed under the **MIT License**. For more details, see the `LICENSE.md` file.
