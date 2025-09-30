@@ -67,6 +67,9 @@ ResourceVersionGenerator --company "My Awesome Company" --product "My.dll" --ori
 | | `--forceVersionUpdate` | Erzwingt die Ausführung von `nbgv`, auch wenn gültige Umgebungsvariablen verfügbar sind. Ist nur aktiv, wenn `nbgv` verwendet wird.|
 | | `--forceVersion` | Manuelle **Versionsnummer** (`Major.Minor.Patch.Build`). Überschreibt automatische Versionen. |
 | | `--verbose` | Gibt **ausführliche Konsolenmeldungen** aus, um den Prozess zu verfolgen. |
+| | `--emergencyVersion` | Erzwingt die Version `1.0.0.0-emergency`, unabhängig von anderen Einstellungen. Der Standard ist `false`.|
+| `-e` | `--encoding` | Definiert das Enconding für die erzeugte Datei. Der Wert ist eine Zahl, welche der Encoder `CodePage` entspricht. Der Standard ist hier 65001 (UTF8).|
+| `-s` | `--silent` | Unterdrückt alle Ausgaben, außer im Falle eines Fehlers. |
 
 -----
 
