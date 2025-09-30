@@ -183,7 +183,10 @@ namespace ResourceVersionGenerator
 
             try
             {
-                _log.Info($"ResourceVersionGenerator: V{versionText} - '{outputFilename}'");
+                if (!Program.Options.Silent)
+                {
+                    _log.Info($"ResourceVersionGenerator: V{versionText} - '{outputFilename}'");
+                }
 
                 var company = Program.Options.Company;
                 if (string.IsNullOrWhiteSpace(company))

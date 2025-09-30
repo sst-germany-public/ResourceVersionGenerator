@@ -34,5 +34,8 @@
 
         [CommandLine.Option("emergencyVersion", Required = false, HelpText = "If true, the version will be forced to v1.0.0.0-emergency. Default: false")]
         public bool EmergencyVersion { get; set; } = false;
+
+        [CommandLine.Option('s', "silent", Required = false, HelpText = "If true, all output will be suppressed, as long as everything goes well. Default: false")]
+        public bool Silent { get; set; } = false;
     }
 }
