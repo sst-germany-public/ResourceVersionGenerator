@@ -1,10 +1,14 @@
 # ResourceVersionGenerator Changelog
 
 ___
-## V1.0.20 - 2025-09-30
+## V1.0.23 - 2025-09-30
 
 ### Added
 - Added option '--silent' to suppress all console output except for errors.
+
+### Changed
+- Updated README.md and translated to english.
+
 
 ___
 ## V1.0.19 - 2025-09-30
