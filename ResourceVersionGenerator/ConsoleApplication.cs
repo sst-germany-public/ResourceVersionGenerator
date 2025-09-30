@@ -6,6 +6,9 @@ namespace ResourceVersionGenerator
 {
     internal class ConsoleApplication : IDisposable
     {
+        private static readonly Version EmergencyVersion = new Version(1, 0, 0, 0);
+        private static readonly string EmergencyVersionText = EmergencyVersion.ToString() + "-emergency";
+
         private Services.ConsoleWriter.IService _log;
 
         public ConsoleApplication()
@@ -77,15 +80,43 @@ namespace ResourceVersionGenerator
 
         public async Task<ExitCodes> RunAsync()
         {
+            static bool checkCommandLineOptions()
+            {
+                var count = 0;
+                if (Program.Options.EmergencyVersion)
+                {
+                    count++;
+                }
+
+                if (Program.Options.ForceVersion is not null)
+                {
+                    count++;
+                }
+
+                if (Program.Options.UseNBGV)
+                {
+                    count++;
+                }
+
+                return count <= 1;
+            }
+            if (!checkCommandLineOptions())
+            {
+                _log.Error("Only one of the parameters 'emergency', 'forceVersion' or 'nbgv' can be specified.");
+                return ExitCodes.MultipleVersionsSpecifiersSet;
+            }
+
             // We start with an emergency type version, so we always have something to write.
-            var version = new Version(0, 0, 0, 0);
-            var versionText = "0.0.0.0-emergency";
+            var version = EmergencyVersion;
+            var versionText = EmergencyVersionText;
 
             // Use NBGV to get version information, if requested...
             if (Program.Options.UseNBGV)
             {
+                _log.Verbose("Using NBGV to read version (--nbgv).");
+
                 NbgvVersionInfo? nbgvVersionInfo = null;
-                if (!Program.Options.ForceGet)
+                if (!Program.Options.ForceNbgvVersionUpdate)
                 {
                     nbgvVersionInfo = await NbgvVersionInfo.CreateFromEnvironmentAsync(_log);
                 }
@@ -111,14 +142,26 @@ namespace ResourceVersionGenerator
             }
 
             // If a commandline version is specified, it has the highest priority.
-            if (!string.IsNullOrWhiteSpace(Program.Options.Version))
+            if (!string.IsNullOrWhiteSpace(Program.Options.ForceVersion))
             {
-                if (!Version.TryParse(Program.Options.Version, out version))
+                _log.Verbose($"Using forced version (--forceVersion): {Program.Options.ForceVersion}");
+                if (Version.TryParse(Program.Options.ForceVersion, out version))
                 {
-                    version = new Version(0, 0, 0, 0);
-                    _log.Error($"The specified version '{Program.Options.Version}' is not valid.");
+                    versionText = Program.Options.ForceVersion;
                 }
-                versionText = Program.Options.Version;
+                else
+                {
+                    version = EmergencyVersion;
+                    versionText = EmergencyVersionText;
+                    _log.Error($"The specified version '{Program.Options.ForceVersion}' is not valid.");
+                }
+            }
+
+            if (Program.Options.EmergencyVersion)
+            {
+                _log.Verbose("Using emergency version (--emergencyVersion).");
+                version = EmergencyVersion;
+                versionText = EmergencyVersionText;
             }
 
             if (!WriteOutputFile(version, versionText))
