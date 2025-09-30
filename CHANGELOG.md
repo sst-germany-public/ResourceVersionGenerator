@@ -1,6 +1,12 @@
 # ResourceVersionGenerator Changelog
 
 ___
+## V1.0.19 - 2025-09-30
+
+### Fixed
+- Fixed a bug where the option `--emergencyVersion` was misslabled `--emergency`.
+
+___
 ## V1.0.18 - 2025-09-30
 (started with changelog documentation, previously implemented features are not listed)
 

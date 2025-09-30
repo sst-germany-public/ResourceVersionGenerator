@@ -32,7 +32,7 @@
         [CommandLine.Option('e', "encoding", Required = false, HelpText = "Encoding codepage. Default: 65001 (UTF8).")]
         public int Encoding { get; set; } = 65001;
 
-        [CommandLine.Option("emergency", Required = false, HelpText = "If true, the version will be forced to v1.0.0.0-emergency. Default: false")]
+        [CommandLine.Option("emergencyVersion", Required = false, HelpText = "If true, the version will be forced to v1.0.0.0-emergency. Default: false")]
         public bool EmergencyVersion { get; set; } = false;
     }
 }
